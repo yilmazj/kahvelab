@@ -2,170 +2,114 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kahvelab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KahveLab - Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
+            /* Renk Paleti - İlk tasarımdaki Koyu Kırmızı Tonları */
             --primary-dark: #2C0309; /* Koyu Bordo */
             --primary-light: #A61C26; /* Açık Kırmızı */
+            --primary: #A61C26;
             --gold: #D4AF37; /* Altın Sarısı */
-            --text-color: #ffffff;
+            
+            --bg-body: #F2F2F7;
+            --bg-card: #FFFFFF;
+            --text-main: #000000;
+            --text-sub: #8E8E93;
+            --border-color: #E5E5EA;
+            
+            --nav-height: 85px;
+            --ios-blur: 20px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            -webkit-tap-highlight-color: transparent; /* Mobilde tıklama efektini siler */
+        /* KARANLIK MOD (Sistem ayarına göre) */
+        body.dark-mode {
+            --bg-body: #000000;
+            --bg-card: #1C1C1E;
+            --text-main: #FFFFFF;
+            --text-sub: #98989D;
+            --border-color: #38383A;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: #1a1a1a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            background-color: #000;
+            display: flex; justify-content: center; height: 100vh; overflow: hidden; user-select: none;
         }
 
-        /* Mobil Görünüm Simülasyonu (Telefonda tam ekran olur) */
-        #app-container {
-            width: 100%;
-            max-width: 400px; /* Mobil genişlik sınırı */
-            height: 100vh;
-            max-height: 850px;
-            background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary-dark) 100%);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        #app {
+            width: 100%; max-width: 414px; height: 100%;
+            background-color: var(--bg-body); color: var(--text-main);
+            position: relative; overflow: hidden; display: flex; flex-direction: column;
+            transition: background-color 0.3s ease;
         }
 
-        /* --- SPLASH EKRANI --- */
-        #splash-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, #8B0000 0%, #1a0102 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 999;
-            transition: opacity 0.5s ease;
+        .screen {
+            display: none; flex-direction: column; height: 100%; width: 100%;
+            overflow-y: auto; padding-bottom: var(--nav-height);
+            background: var(--bg-body); animation: fadeIn 0.4s ease;
         }
+        .screen.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hidden { display: none !important; }
 
-        .logo-circle {
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid var(--gold);
-            margin-bottom: 20px;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-        }
-
-        .logo-text {
-            color: var(--text-color);
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        .tagline {
-            color: rgba(255,255,255,0.7);
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        /* --- ANA SAYFA --- */
+        /* --- ÖZEL ANA SAYFA STİLİ (RESİMDEKİ GİBİ KIRMIZI) --- */
         #home-screen {
-            display: none; /* Başlangıçta gizli */
-            height: 100%;
-            flex-direction: column;
-            padding-bottom: 70px; /* Alt menü boşluğu */
+            /* Arka planı resimdeki gibi kırmızı gradyan yapıyoruz */
+            background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary-dark) 100%) !important;
+            color: white !important; /* Yazıları beyaz yap */
         }
-
-        /* Header */
-        .header {
-            padding: 40px 20px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            color: var(--text-color);
-            font-size: 22px;
-        }
-
-        .notif-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+        
+        /* Ana sayfadaki kartların arka planını yarı saydam yapalım ki kırmızı zemin sırııtmasın */
+        #home-screen .widget-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
             color: white;
-            cursor: pointer;
+        }
+        #home-screen .widget-value { color: white; }
+        #home-screen .widget-label { color: rgba(255,255,255,0.7); }
+        #home-screen .section-title { color: white; }
+
+        /* --- HEADER --- */
+        .header {
+            padding: 15px 24px; padding-top: 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            /* Header şeffaf olsun ki kırmızı zemin görünsün */
+            background: transparent; 
+            z-index: 20;
+            border: none;
+        }
+        .header-brand { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 24px; font-weight: 900; 
+            color: white; /* Resimdeki gibi beyaz */
+            letter-spacing: 1px; 
+            width: 100%; text-align: center;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        /* Orta Büyük Buton Alanı */
-        .main-action-area {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+        /* --- PULSE ANIMASYONU (ESKİ KODDAN ALINDI) --- */
+        .pulse-container {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 300px; height: 300px; display: flex; justify-content: center; align-items: center; pointer-events: none;
+            z-index: 1;
         }
-
+        
+        /* İŞTE ARADIĞIN KOD BURADA */
         .circle-bg {
             position: absolute;
-            width: 280px;
+            width: 280px; /* İlk koddaki boyut */
             height: 280px;
             border-radius: 50%;
-            border: 1px solid rgba(212, 175, 55, 0.5);
+            /* Altın sarısı border ve glow efekti */
+            border: 1px solid rgba(212, 175, 55, 0.5); 
             background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(0,0,0,0) 70%);
             animation: pulse 3s infinite;
-        }
-
-        .fal-btn {
-            width: 160px;
-            height: 160px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #720e17 0%, #4a050a 100%);
-            border: 2px solid var(--gold);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative;
-            z-index: 2;
-            transition: transform 0.2s;
-        }
-
-        .fal-btn:active {
-            transform: scale(0.95);
-        }
-
-        .fal-btn i {
-            font-size: 40px;
-            margin-bottom: 10px;
-            color: var(--gold);
-        }
-
-        .fal-btn span {
-            font-weight: 700;
-            font-size: 16px;
         }
 
         @keyframes pulse {
@@ -174,168 +118,262 @@
             100% { transform: scale(1); opacity: 0.5; }
         }
 
-        /* Geçmiş Fallar Listesi */
-        .history-section {
-            padding: 0 20px 20px;
+        /* --- FAL BUTONU (İLK KODDAKİ GÖRÜNÜM) --- */
+        .hero-section {
+            padding: 40px 0; display: flex; flex-direction: column; align-items: center;
+            background: transparent; /* Zaten home-screen kırmızı */
+            position: relative; overflow: visible; min-height: 400px; justify-content: center;
         }
 
-        .section-title {
-            color: white;
-            font-size: 18px;
-            margin-bottom: 15px;
-            font-weight: 600;
+        .main-fal-btn {
+            width: 160px; height: 160px; border-radius: 50%;
+            /* İlk koddaki koyu kırmızı buton gradyanı */
+            background: linear-gradient(135deg, #720e17 0%, #4a050a 100%);
+            border: 2px solid var(--gold); /* Altın çerçeve */
+            color: white; 
+            font-size: 16px; font-weight: 700;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5); /* Gölgeyi artırdım */
+            z-index: 5; cursor: pointer; position: relative;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+            transition: transform 0.2s;
         }
+        .main-fal-btn:active { transform: scale(0.95); }
+        .main-fal-btn i { font-size: 40px; color: var(--gold); margin-bottom: 5px; }
 
-        .history-list {
-            display: flex;
-            overflow-x: auto;
-            gap: 15px;
-            padding-bottom: 10px;
-        }
-        
-        /* Scrollbar'ı gizle */
-        .history-list::-webkit-scrollbar {
-            display: none;
-        }
-
-        .history-card {
-            min-width: 100px;
-            height: 110px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        .credit-badge-pill {
+            margin-top: 25px; 
+            background: rgba(0,0,0,0.3); /* Kırmızı üstüne siyah transparan */
+            padding: 8px 16px; border-radius: 20px;
+            font-size: 13px; font-weight: 600; color: white; z-index: 5;
             border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .history-card i {
-            color: var(--gold);
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .history-card span {
-            color: white;
-            font-size: 12px;
-            text-align: center;
-        }
-
-        /* Alt Navigasyon */
+        /* --- BOTTOM NAV (SENİN İSTEDİĞİN GİBİ KORUNDU) --- */
         .bottom-nav {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 70px;
-            background: #180204;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            position: absolute; bottom: 0; width: 100%; height: var(--nav-height);
+            background: rgba(255,255,255,0.85); /* Beyaz buzlu cam */
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            display: flex; justify-content: space-around; align-items: flex-start;
+            padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.05);
+            z-index: 100;
         }
+        /* Karanlık modda alt bar */
+        body.dark-mode .bottom-nav { background: rgba(28,28,30,0.85); border-top: 1px solid rgba(255,255,255,0.1); }
+        
+        .nav-item { 
+            display: flex; flex-direction: column; align-items: center; 
+            color: var(--text-sub); font-size: 10px; gap: 6px; 
+            cursor: pointer; width: 60px; font-weight: 500; 
+            transition: all 0.2s ease;
+        }
+        .nav-item.active { color: #8B0000; } /* Aktif olunca koyu kırmızı */
+        .nav-item i { font-size: 20px; transition: transform 0.2s; }
+        .nav-item.active i { transform: translateY(-2px); }
 
-        .nav-item {
-            color: rgba(255,255,255,0.5);
-            font-size: 24px;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        .nav-item.active {
-            color: var(--gold);
-        }
+        /* --- DİĞER CSS (Login, Profil vb. için standart) --- */
+        .auth-input { width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font-size: 15px; }
+        .submit-btn { width: 100%; padding: 16px; border-radius: 14px; background: var(--primary); color: white; border: none; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .summary-container { padding: 0 24px; position: relative; margin-top: 10px; padding-bottom: 100px; }
+        .summary-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .widget-card.wide { grid-column: span 2; flex-direction: row; align-items: center; justify-content: space-between; }
+        .widget-icon { font-size: 20px; margin-bottom: 5px; }
+        
+        /* Modal Stilleri */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 190; display: none; opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.open { display: block; opacity: 1; }
+        .action-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; z-index: 250; background: var(--bg-card); border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 24px; transition: bottom 0.3s ease; }
+        .action-sheet.open { bottom: 0; }
+        .action-btn { width: 100%; padding: 16px; margin-bottom: 10px; border-radius: 14px; background: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-main); font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
     </style>
 </head>
-<body>
+<body class="">
 
-    <div id="app-container">
-        
-        <div id="splash-screen">
-            <div class="logo-circle">
-                <i class="fa-solid fa-mug-hot" style="font-size: 50px; color: #D4AF37;"></i>
+    <div id="app">
+
+        <div id="splash-screen" style="position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(180deg, #A61C26 0%, #2C0309 100%); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; transition: opacity 0.8s;">
+             <div class="circle-bg" style="position:relative; width:120px; height:120px; margin-bottom:20px;">
+                <i class="fa-solid fa-mug-hot" style="font-size: 50px; color: #D4AF37; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);"></i>
             </div>
-            <h1 class="logo-text">KAHVELAB</h1>
-            <p class="tagline">Geleceğin Sırları Burada</p>
+            <h1 style="color:white; font-size:32px; font-weight:700; letter-spacing:2px; font-family:'Poppins', sans-serif;">KAHVELAB</h1>
         </div>
 
-        <div id="home-screen">
-            <div class="header">
-                <h1>Ana Sayfa</h1>
-                <button class="notif-btn">
-                    <i class="fa-regular fa-bell"></i>
-                </button>
+        <div id="overlay" class="modal-overlay" onclick="closeAllSheets()"></div>
+
+        <div id="photo-options-sheet" class="action-sheet">
+            <h3 style="text-align:center; margin-bottom:20px; font-size:16px; color:var(--text-main);">Fal Gönder</h3>
+            <button class="action-btn" onclick="alert('Kamera açılıyor...')"><i class="fa-solid fa-camera"></i> Fotoğraf Çek</button>
+            <button class="action-btn" onclick="alert('Galeri açılıyor...')"><i class="fa-solid fa-image"></i> Galeriden Seç</button>
+            <button class="action-btn" style="color:#FF3B30; border-color:#FF3B30;" onclick="closeAllSheets()">Vazgeç</button>
+        </div>
+
+        <div id="auth-screen" class="screen">
+            <div class="header" style="background:transparent; border:none;">
+                <div class="icon-btn" onclick="navTo('home-screen')" style="color:var(--text-main)"><i class="fa-solid fa-arrow-left"></i></div>
+            </div>
+            <div style="padding: 24px;">
+                <h2 style="font-size:28px; font-weight:800; margin-bottom:20px; color:var(--text-main);">Hoş Geldin</h2>
+                <input type="email" id="login-email" class="auth-input" placeholder="E-Posta (volkan@litre.com = Premium)">
+                <input type="password" id="login-pass" class="auth-input" placeholder="Şifre">
+                <button class="submit-btn" onclick="window.handleLogin()">Giriş Yap</button>
+            </div>
+        </div>
+
+        <div id="home-screen" class="screen active">
+            <div class="header" style="justify-content: center;">
+                <div class="header-brand">KahveLab</div>
+                <button style="position:absolute; right:20px; background:rgba(255,255,255,0.2); border:none; width:40px; height:40px; border-radius:50%; color:white;"><i class="fa-regular fa-bell"></i></button>
             </div>
 
-            <div class="main-action-area">
-                <div class="circle-bg"></div>
-                <button class="fal-btn" onclick="startCamera()">
+            <div class="hero-section">
+                <div class="pulse-container">
+                    <div class="circle-bg"></div>
+                </div>
+
+                <button class="main-fal-btn" onclick="openPhotoOptions()">
                     <i class="fa-solid fa-camera"></i>
                     <span>FAL GÖNDER</span>
                 </button>
-            </div>
-
-            <div class="history-section">
-                <h3 class="section-title">Geçmiş Fallarım</h3>
-                <div class="history-list">
-                    <div class="history-card">
-                        <i class="fa-solid fa-scroll"></i>
-                        <span>Fal #1<br><small style="opacity:0.6">Dün</small></span>
-                    </div>
-                    <div class="history-card">
-                        <i class="fa-solid fa-scroll"></i>
-                        <span>Fal #2<br><small style="opacity:0.6">3 Gün Önce</small></span>
-                    </div>
-                    <div class="history-card">
-                        <i class="fa-solid fa-scroll"></i>
-                        <span>Fal #3<br><small style="opacity:0.6">1 Hafta</small></span>
-                    </div>
-                    <div class="history-card">
-                        <i class="fa-solid fa-scroll"></i>
-                        <span>Fal #4<br><small style="opacity:0.6">1 Ay</small></span>
-                    </div>
+                
+                <div class="credit-badge-pill">
+                    <i class="fa-solid fa-bolt" style="color:var(--gold)"></i>
+                    <span id="credit-count">3</span> Hak
                 </div>
             </div>
 
-            <div class="bottom-nav">
-                <div class="nav-item active"><i class="fa-solid fa-house"></i></div>
-                <div class="nav-item"><i class="fa-solid fa-calendar-days"></i></div>
-                <div class="nav-item"><i class="fa-solid fa-bell"></i></div>
-                <div class="nav-item"><i class="fa-solid fa-user"></i></div>
+            <div class="summary-container">
+                <div class="section-title">Günün Özeti</div>
+                
+                <div id="summary-content" class="summary-wrapper locked" style="filter: blur(5px);">
+                    <div class="widget-card">
+                        <i class="fa-solid fa-star widget-icon" style="color:var(--gold);"></i>
+                        <div class="widget-label">ENERJİ</div>
+                        <div class="widget-value">Yüksek</div>
+                    </div>
+                    <div class="widget-card">
+                        <i class="fa-solid fa-heart widget-icon" style="color:#ff4d4d;"></i>
+                        <div class="widget-label">AŞK</div>
+                        <div class="widget-value">Sürpriz Var</div>
+                    </div>
+                    <div class="widget-card wide">
+                         <div>
+                            <div class="widget-label">GÜNÜN RENGİ</div>
+                            <div class="widget-value">Mistik Mor</div>
+                        </div>
+                        <div style="width:30px; height:30px; border-radius:50%; background:#9b59b6; border:2px solid rgba(255,255,255,0.2);"></div>
+                    </div>
+                </div>
+                 <div id="lock-overlay" style="position:absolute; top:40px; left:0; width:100%; height:100px; display:flex; justify-content:center; align-items:center; z-index:10;">
+                    <button class="submit-btn" style="width:auto; padding: 10px 24px; font-size:13px; background:white; color:black;" onclick="navTo('auth-screen')">Giriş Yap</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="fortunes-screen" class="screen">
+            <div class="header"><div class="header-title">Fallarım</div></div>
+            <div style="padding:40px; text-align:center; color:var(--text-sub);">Henüz Falın Yok</div>
+        </div>
+
+        <div id="profile-screen" class="screen">
+            <div class="header"><div class="header-title">Hesabım</div></div>
+            <div style="padding:20px; text-align:center;">
+                <h2 id="profile-name" style="color:var(--text-main)">Misafir</h2>
+                <button class="submit-btn" onclick="navTo('auth-screen')">Giriş Yap</button>
+            </div>
+             <div class="bottom-nav">
+                <div class="nav-item" onclick="navTo('home-screen', this)">
+                    <i class="fa-solid fa-house"></i><span>Ana Sayfa</span>
+                </div>
+                <div class="nav-item" onclick="navTo('fortunes-screen', this)"> 
+                    <i class="fa-solid fa-scroll"></i><span>Fallarım</span>
+                </div>
+                <div class="nav-item active" onclick="navTo('profile-screen', this)">
+                    <i class="fa-solid fa-user"></i><span>Hesabım</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="navTo('home-screen', this)">
+                <i class="fa-solid fa-house"></i><span>Ana Sayfa</span>
+            </div>
+            <div class="nav-item" onclick="navTo('fortunes-screen', this)"> 
+                <i class="fa-solid fa-scroll"></i><span>Fallarım</span>
+            </div>
+            <div class="nav-item" onclick="navTo('profile-screen', this)">
+                <i class="fa-solid fa-user"></i><span>Hesabım</span>
             </div>
         </div>
 
     </div>
 
-    <script>
-        // Sayfa yüklendiğinde çalışacak kodlar
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            const splashScreen = document.getElementById('splash-screen');
-            const homeScreen = document.getElementById('home-screen');
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-            // 3 Saniye sonra Splash'i kaldır, Home'u getir
-            setTimeout(() => {
-                splashScreen.style.opacity = '0';
-                
-                // Opaklık animasyonu bitince display:none yap
-                setTimeout(() => {
-                    splashScreen.style.display = 'none';
-                    homeScreen.style.display = 'flex';
-                }, 500);
+        const firebaseConfig = {
+          apiKey: "AIzaSyDVV5cLOkjaJ3k-FUwqRE4LucN293RPBbM",
+          authDomain: "kahvelabweb.firebaseapp.com",
+          projectId: "kahvelabweb",
+          storageBucket: "kahvelabweb.firebasestorage.app",
+          messagingSenderId: "754884541831",
+          appId: "1:754884541831:web:4a4cf4046a31b269ea2722"
+        };
 
-            }, 3000); // 3000 milisaniye = 3 saniye
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.handleLogin = async function() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            try { await signInWithEmailAndPassword(auth, email, pass); } 
+            catch (error) { alert("Hata: " + error.message); }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('profile-name').innerText = user.email.split('@')[0];
+                document.getElementById('summary-content').style.filter = 'none';
+                document.getElementById('lock-overlay').style.display = 'none';
+                window.navTo('home-screen'); 
+            }
         });
 
-        // Fal Gönder Butonu Fonksiyonu
-        function startCamera() {
-            // Şimdilik sadece uyarı versin, sonra buraya kamera açma kodu gelecek
-            alert("Kamera arayüzüne geçiliyor...");
-            // Burada mockup'taki 2. sayfaya (kamera ekranı) geçiş yapacağız.
+        window.navTo = function(screenId, navEl) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            // Eğer alt menüden tıklandıysa aktif yap
+            if(navEl) {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                navEl.classList.add('active');
+            }
+            
+            // Eğer Home dışındaki sayfalara geçilirse arka planı normale çevir
+            const app = document.getElementById('app');
+            if(screenId !== 'home-screen') {
+                // Burada body arka planını değiştirebiliriz ama .screen zaten kendi bg'sine sahip.
+            }
         }
-    </script>
+        
+        window.openPhotoOptions = function() {
+            document.getElementById('overlay').classList.add('open');
+            document.getElementById('photo-options-sheet').classList.add('open');
+        }
+        window.closeAllSheets = function() {
+            document.getElementById('overlay').classList.remove('open');
+            document.querySelectorAll('.action-sheet').forEach(s => s.classList.remove('open'));
+        }
 
+        // Splash screen animasyonu
+        setTimeout(() => { 
+            document.getElementById('splash-screen').style.opacity='0'; 
+            setTimeout(()=>{ 
+                document.getElementById('splash-screen').style.display='none'; 
+                document.getElementById('home-screen').classList.add('active');
+            },800); 
+        }, 2000);
+
+    </script>
 </body>
 </html>
