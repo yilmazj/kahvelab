@@ -9,35 +9,25 @@
     
     <style>
         :root {
-            /* Renk Paleti - İlk tasarımdaki Koyu Kırmızı Tonları */
-            --primary-dark: #2C0309; /* Koyu Bordo */
-            --primary-light: #A61C26; /* Açık Kırmızı */
+            /* Renk Paleti - Koyu Kırmızı ve Altın */
+            --primary-dark: #2C0309; 
+            --primary-light: #A61C26; 
             --primary: #A61C26;
-            --gold: #D4AF37; /* Altın Sarısı */
+            --gold: #FFD700; 
             
-            --bg-body: #F2F2F7;
-            --bg-card: #FFFFFF;
-            --text-main: #000000;
-            --text-sub: #8E8E93;
-            --border-color: #E5E5EA;
+            --bg-body: #1a0204; /* Genel arka plan çok koyu kırmızı/siyah */
+            --bg-card: #2a0508; /* Kartlar bir tık açık */
+            --text-main: #FFFFFF;
+            --text-sub: #rgba(255,255,255,0.6);
+            --border-color: rgba(255,255,255,0.1);
             
             --nav-height: 85px;
-            --ios-blur: 20px;
-        }
-
-        /* KARANLIK MOD (Sistem ayarına göre) */
-        body.dark-mode {
-            --bg-body: #000000;
-            --bg-card: #1C1C1E;
-            --text-main: #FFFFFF;
-            --text-sub: #98989D;
-            --border-color: #38383A;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: #000;
+            background-color: var(--bg-body);
             display: flex; justify-content: center; height: 100vh; overflow: hidden; user-select: none;
         }
 
@@ -45,7 +35,6 @@
             width: 100%; max-width: 414px; height: 100%;
             background-color: var(--bg-body); color: var(--text-main);
             position: relative; overflow: hidden; display: flex; flex-direction: column;
-            transition: background-color 0.3s ease;
         }
 
         .screen {
@@ -57,172 +46,180 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .hidden { display: none !important; }
 
-        /* --- ÖZEL ANA SAYFA STİLİ (RESİMDEKİ GİBİ KIRMIZI) --- */
-        #home-screen {
-            /* Arka planı resimdeki gibi kırmızı gradyan yapıyoruz */
-            background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary-dark) 100%) !important;
-            color: white !important; /* Yazıları beyaz yap */
-        }
-        
-        /* Ana sayfadaki kartların arka planını yarı saydam yapalım ki kırmızı zemin sırııtmasın */
-        #home-screen .widget-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-        }
-        #home-screen .widget-value { color: white; }
-        #home-screen .widget-label { color: rgba(255,255,255,0.7); }
-        #home-screen .section-title { color: white; }
-
         /* --- HEADER --- */
         .header {
             padding: 15px 24px; padding-top: 50px;
             display: flex; justify-content: space-between; align-items: center;
-            /* Header şeffaf olsun ki kırmızı zemin görünsün */
             background: transparent; 
             z-index: 20;
-            border: none;
         }
         .header-brand { 
             font-family: 'Playfair Display', serif; 
-            font-size: 24px; font-weight: 900; 
-            color: white; /* Resimdeki gibi beyaz */
+            font-size: 26px; font-weight: 900; 
+            color: white;
             letter-spacing: 1px; 
             width: 100%; text-align: center;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
+        .header-title { font-size: 18px; font-weight: 600; position: absolute; left: 50%; transform: translateX(-50%); }
 
-        /* --- PULSE ANIMASYONU (ESKİ KODDAN ALINDI) --- */
-        .pulse-container {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; height: 300px; display: flex; justify-content: center; align-items: center; pointer-events: none;
-            z-index: 1;
+        /* --- HERO SECTION & PULSE --- */
+        .hero-section {
+            padding: 20px 0; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary-dark) 100%);
+            position: relative; overflow: visible; 
+            min-height: 420px;
+            border-bottom-left-radius: 40px; border-bottom-right-radius: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
         
-        /* İŞTE ARADIĞIN KOD BURADA */
+        /* Pulse Alanı */
+        .pulse-container {
+            position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+            width: 320px; height: 320px; display: flex; justify-content: center; align-items: center; pointer-events: none;
+        }
         .circle-bg {
-            position: absolute;
-            width: 280px; /* İlk koddaki boyut */
-            height: 280px;
-            border-radius: 50%;
-            /* Altın sarısı border ve glow efekti */
-            border: 1px solid rgba(212, 175, 55, 0.5); 
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.2) 0%, rgba(0,0,0,0) 70%);
+            position: absolute; width: 300px; height: 300px; border-radius: 50%;
+            border: 1px solid rgba(255, 215, 0, 0.4); 
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, rgba(0,0,0,0) 70%);
             animation: pulse 3s infinite;
         }
-
         @keyframes pulse {
             0% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 0.8; }
             100% { transform: scale(1); opacity: 0.5; }
         }
 
-        /* --- FAL BUTONU (İLK KODDAKİ GÖRÜNÜM) --- */
-        .hero-section {
-            padding: 40px 0; display: flex; flex-direction: column; align-items: center;
-            background: transparent; /* Zaten home-screen kırmızı */
-            position: relative; overflow: visible; min-height: 400px; justify-content: center;
-        }
-
+        /* Ana Buton */
         .main-fal-btn {
-            width: 160px; height: 160px; border-radius: 50%;
-            /* İlk koddaki koyu kırmızı buton gradyanı */
-            background: linear-gradient(135deg, #720e17 0%, #4a050a 100%);
-            border: 2px solid var(--gold); /* Altın çerçeve */
+            width: 170px; height: 170px; border-radius: 50%;
+            background: linear-gradient(135deg, #8B0000 0%, #500000 100%);
+            border: 3px solid var(--gold);
             color: white; 
-            font-size: 16px; font-weight: 700;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5); /* Gölgeyi artırdım */
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
             z-index: 5; cursor: pointer; position: relative;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px;
             transition: transform 0.2s;
         }
         .main-fal-btn:active { transform: scale(0.95); }
-        .main-fal-btn i { font-size: 40px; color: var(--gold); margin-bottom: 5px; }
+        .main-fal-btn i { font-size: 44px; color: var(--gold); }
+        .main-fal-btn span { font-size: 19px; font-weight: 800; letter-spacing: 0.5px; }
 
+        /* Hak Rozeti - AŞAĞIYA ALINDI */
         .credit-badge-pill {
-            margin-top: 25px; 
-            background: rgba(0,0,0,0.3); /* Kırmızı üstüne siyah transparan */
-            padding: 8px 16px; border-radius: 20px;
-            font-size: 13px; font-weight: 600; color: white; z-index: 5;
-            border: 1px solid rgba(255,255,255,0.1);
+            margin-top: 50px; /* Halkanın altına insin diye boşluk artırıldı */
+            background: rgba(0,0,0,0.6);
+            padding: 10px 20px; border-radius: 30px;
+            font-size: 14px; font-weight: 700; color: white; z-index: 5;
+            border: 1px solid rgba(255,215,0, 0.3);
+            display: flex; align-items: center; gap: 8px;
+            backdrop-filter: blur(5px);
         }
 
-        /* --- BOTTOM NAV (SENİN İSTEDİĞİN GİBİ KORUNDU) --- */
+        /* --- BOTTOM NAV (YENİLENMİŞ KOYU TASARIM) --- */
         .bottom-nav {
             position: absolute; bottom: 0; width: 100%; height: var(--nav-height);
-            background: rgba(255,255,255,0.85); /* Beyaz buzlu cam */
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            /* Siyah/Koyu Bordo Transparan Arkaplan */
+            background: rgba(20, 0, 0, 0.85); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             display: flex; justify-content: space-around; align-items: flex-start;
-            padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 20px; 
+            border-top: 1px solid rgba(255,255,255,0.08); /* Hafif çizgi */
             z-index: 100;
         }
-        /* Karanlık modda alt bar */
-        body.dark-mode .bottom-nav { background: rgba(28,28,30,0.85); border-top: 1px solid rgba(255,255,255,0.1); }
         
         .nav-item { 
             display: flex; flex-direction: column; align-items: center; 
-            color: var(--text-sub); font-size: 10px; gap: 6px; 
-            cursor: pointer; width: 60px; font-weight: 500; 
-            transition: all 0.2s ease;
+            color: rgba(255,255,255,0.4); /* Pasif ikonlar soluk beyaz */
+            font-size: 11px; gap: 6px; 
+            cursor: pointer; width: 70px; font-weight: 500; 
+            transition: all 0.3s ease;
         }
-        .nav-item.active { color: #8B0000; } /* Aktif olunca koyu kırmızı */
-        .nav-item i { font-size: 20px; transition: transform 0.2s; }
-        .nav-item.active i { transform: translateY(-2px); }
+        .nav-item.active { 
+            color: var(--gold); /* Aktif ikon ALTIN sarısı */
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+        }
+        .nav-item i { font-size: 22px; transition: transform 0.2s; }
+        .nav-item.active i { transform: translateY(-4px); }
 
-        /* --- DİĞER CSS (Login, Profil vb. için standart) --- */
-        .auth-input { width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font-size: 15px; }
-        .submit-btn { width: 100%; padding: 16px; border-radius: 14px; background: var(--primary); color: white; border: none; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        .summary-container { padding: 0 24px; position: relative; margin-top: 10px; padding-bottom: 100px; }
-        .summary-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .widget-card.wide { grid-column: span 2; flex-direction: row; align-items: center; justify-content: space-between; }
-        .widget-icon { font-size: 20px; margin-bottom: 5px; }
+        /* --- ÖZET KARTLARI --- */
+        .summary-container { padding: 0 24px; position: relative; margin-top: 20px; padding-bottom: 100px; }
+        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; color: white; }
         
-        /* Modal Stilleri */
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 190; display: none; opacity: 0; transition: opacity 0.3s; }
-        .modal-overlay.open { display: block; opacity: 1; }
-        .action-sheet { position: fixed; bottom: -100%; left: 0; width: 100%; z-index: 250; background: var(--bg-card); border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 24px; transition: bottom 0.3s ease; }
-        .action-sheet.open { bottom: 0; }
-        .action-btn { width: 100%; padding: 16px; margin-bottom: 10px; border-radius: 14px; background: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-main); font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .summary-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .widget-card {
+            background: rgba(255,255,255,0.05); border-radius: 18px; padding: 16px;
+            border: 1px solid rgba(255,255,255,0.05); color: white;
+        }
+        .widget-value { font-size: 16px; font-weight: 700; color: white; }
+        .widget-label { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; font-weight: 600; margin-bottom: 4px; }
+        .widget-card.wide { grid-column: span 2; display: flex; align-items: center; justify-content: space-between; }
 
+        /* --- PROFİL & AYARLAR --- */
+        .profile-header { text-align: center; padding: 30px 20px; border-bottom: 1px solid var(--border-color); }
+        .menu-list { padding: 20px; }
+        .menu-item {
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255,255,255,0.05); padding: 18px; border-radius: 14px; margin-bottom: 12px;
+            border: 1px solid var(--border-color); color: white; font-size: 15px; cursor: pointer;
+        }
+        
+        /* Premium Kart */
+        .premium-card-v2 {
+            margin: 0 24px; background: linear-gradient(135deg, #1C1C1E 0%, #000000 100%);
+            border-radius: 20px; padding: 24px; position: relative; overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            margin-top: -20px; margin-bottom: 20px;
+        }
+        .premium-btn {
+            background: linear-gradient(90deg, #FFD700, #FDB931); color: black; border: none; 
+            padding: 14px; width: 100%; border-radius: 12px; font-weight: 700; margin-top: 15px; cursor: pointer;
+        }
+        .premium-feature-list li { color: #ddd; font-size: 13px; margin-bottom: 8px; display: flex; gap: 10px; }
+
+        /* Auth Form */
+        .auth-input { width: 100%; padding: 16px; margin-bottom: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; font-size: 15px; }
+        .submit-btn { width: 100%; padding: 16px; border-radius: 14px; background: var(--primary); color: white; border: none; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 10px; box-shadow: 0 5px 15px rgba(166, 28, 38, 0.4); }
+
+        /* Modallar */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 190; display: none; opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.open { display: block; opacity: 1; }
+        .action-sheet, .modal-sheet { 
+            position: fixed; bottom: -100%; left: 0; width: 100%; z-index: 250; 
+            background: #200508; /* Koyu Modal */
+            border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; 
+            transition: bottom 0.3s ease; border-top: 1px solid rgba(255,255,255,0.1); color: white;
+        }
+        .action-sheet.open, .modal-sheet.open { bottom: 0; }
+        .action-btn { width: 100%; padding: 16px; margin-bottom: 10px; border-radius: 14px; background: rgba(255,255,255,0.1); border: none; color: white; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; gap: 10px; justify-content: center; align-items: center;}
+        
     </style>
 </head>
-<body class="">
+<body>
 
     <div id="app">
 
-        <div id="splash-screen" style="position:absolute; top:0; left:0; width:100%; height:100%; background:linear-gradient(180deg, #A61C26 0%, #2C0309 100%); z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; transition: opacity 0.8s;">
-             <div class="circle-bg" style="position:relative; width:120px; height:120px; margin-bottom:20px;">
-                <i class="fa-solid fa-mug-hot" style="font-size: 50px; color: #D4AF37; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);"></i>
-            </div>
-            <h1 style="color:white; font-size:32px; font-weight:700; letter-spacing:2px; font-family:'Poppins', sans-serif;">KAHVELAB</h1>
-        </div>
-
         <div id="overlay" class="modal-overlay" onclick="closeAllSheets()"></div>
 
-        <div id="photo-options-sheet" class="action-sheet">
-            <h3 style="text-align:center; margin-bottom:20px; font-size:16px; color:var(--text-main);">Fal Gönder</h3>
-            <button class="action-btn" onclick="alert('Kamera açılıyor...')"><i class="fa-solid fa-camera"></i> Fotoğraf Çek</button>
-            <button class="action-btn" onclick="alert('Galeri açılıyor...')"><i class="fa-solid fa-image"></i> Galeriden Seç</button>
-            <button class="action-btn" style="color:#FF3B30; border-color:#FF3B30;" onclick="closeAllSheets()">Vazgeç</button>
-        </div>
-
         <div id="auth-screen" class="screen">
-            <div class="header" style="background:transparent; border:none;">
-                <div class="icon-btn" onclick="navTo('home-screen')" style="color:var(--text-main)"><i class="fa-solid fa-arrow-left"></i></div>
+            <div class="header">
+                <div onclick="navTo('home-screen')" style="font-size:24px; color:white; cursor:pointer;"><i class="fa-solid fa-arrow-left"></i></div>
             </div>
-            <div style="padding: 24px;">
-                <h2 style="font-size:28px; font-weight:800; margin-bottom:20px; color:var(--text-main);">Hoş Geldin</h2>
-                <input type="email" id="login-email" class="auth-input" placeholder="E-Posta (volkan@litre.com = Premium)">
+            <div style="padding: 24px; margin-top: 20px;">
+                <h2 style="font-size:32px; font-weight:800; margin-bottom:30px; color:white;">Giriş Yap</h2>
+                <input type="email" id="login-email" class="auth-input" placeholder="E-Posta (volkan@litre.com)">
                 <input type="password" id="login-pass" class="auth-input" placeholder="Şifre">
                 <button class="submit-btn" onclick="window.handleLogin()">Giriş Yap</button>
+                <div style="text-align:center; margin-top:20px; font-size:14px; color:rgba(255,255,255,0.5);">veya</div>
+                <button class="submit-btn" style="background:white; color:black; margin-top:20px;">Kayıt Ol</button>
             </div>
         </div>
 
         <div id="home-screen" class="screen active">
             <div class="header" style="justify-content: center;">
                 <div class="header-brand">KahveLab</div>
-                <button style="position:absolute; right:20px; background:rgba(255,255,255,0.2); border:none; width:40px; height:40px; border-radius:50%; color:white;"><i class="fa-regular fa-bell"></i></button>
+                <button style="position:absolute; right:20px; background:rgba(255,255,255,0.1); border:none; width:40px; height:40px; border-radius:50%; color:white;"><i class="fa-regular fa-bell"></i></button>
             </div>
 
             <div class="hero-section">
@@ -244,14 +241,18 @@
             <div class="summary-container">
                 <div class="section-title">Günün Özeti</div>
                 
-                <div id="summary-content" class="summary-wrapper locked" style="filter: blur(5px);">
+                <div id="lock-overlay" style="position:absolute; top:45px; left:0; width:100%; height:120px; display:flex; justify-content:center; align-items:center; z-index:10; background:rgba(0,0,0,0.2); backdrop-filter:blur(3px); border-radius:18px;">
+                     <button class="submit-btn" style="width:auto; padding: 10px 24px; font-size:13px; background:white; color:black;" onclick="navTo('auth-screen')">Giriş Yap</button>
+                </div>
+
+                <div id="summary-content" class="summary-wrapper" style="filter: blur(6px);">
                     <div class="widget-card">
-                        <i class="fa-solid fa-star widget-icon" style="color:var(--gold);"></i>
+                        <i class="fa-solid fa-star widget-icon" style="color:var(--gold); margin-bottom:5px;"></i>
                         <div class="widget-label">ENERJİ</div>
                         <div class="widget-value">Yüksek</div>
                     </div>
                     <div class="widget-card">
-                        <i class="fa-solid fa-heart widget-icon" style="color:#ff4d4d;"></i>
+                        <i class="fa-solid fa-heart widget-icon" style="color:#ff4d4d; margin-bottom:5px;"></i>
                         <div class="widget-label">AŞK</div>
                         <div class="widget-value">Sürpriz Var</div>
                     </div>
@@ -263,32 +264,77 @@
                         <div style="width:30px; height:30px; border-radius:50%; background:#9b59b6; border:2px solid rgba(255,255,255,0.2);"></div>
                     </div>
                 </div>
-                 <div id="lock-overlay" style="position:absolute; top:40px; left:0; width:100%; height:100px; display:flex; justify-content:center; align-items:center; z-index:10;">
-                    <button class="submit-btn" style="width:auto; padding: 10px 24px; font-size:13px; background:white; color:black;" onclick="navTo('auth-screen')">Giriş Yap</button>
-                </div>
             </div>
         </div>
 
         <div id="fortunes-screen" class="screen">
-            <div class="header"><div class="header-title">Fallarım</div></div>
-            <div style="padding:40px; text-align:center; color:var(--text-sub);">Henüz Falın Yok</div>
+            <div class="header"><div class="header-title" style="color:white;">Fallarım</div></div>
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; color:rgba(255,255,255,0.5);">
+                <i class="fa-solid fa-scroll" style="font-size:50px; margin-bottom:20px; opacity:0.3;"></i>
+                <div>Henüz Falın Yok</div>
+            </div>
         </div>
 
         <div id="profile-screen" class="screen">
-            <div class="header"><div class="header-title">Hesabım</div></div>
-            <div style="padding:20px; text-align:center;">
-                <h2 id="profile-name" style="color:var(--text-main)">Misafir</h2>
-                <button class="submit-btn" onclick="navTo('auth-screen')">Giriş Yap</button>
+            <div class="header"><div class="header-title" style="color:white;">Hesabım</div></div>
+            
+            <div class="profile-header">
+                <div style="width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,0.1); margin:0 auto 15px auto; display:flex; align-items:center; justify-content:center; border:2px solid var(--gold);">
+                    <i class="fa-solid fa-user" style="font-size:30px; color:white;"></i>
+                </div>
+                <h2 id="profile-name" style="color:white; font-size:20px;">Misafir Kullanıcı</h2>
+                <div id="guest-actions" style="margin-top:15px;">
+                     <button class="submit-btn" style="width:auto; padding:10px 30px;" onclick="navTo('auth-screen')">Giriş Yap / Kayıt Ol</button>
+                </div>
             </div>
-             <div class="bottom-nav">
-                <div class="nav-item" onclick="navTo('home-screen', this)">
-                    <i class="fa-solid fa-house"></i><span>Ana Sayfa</span>
+
+            <div id="premium-area" class="hidden">
+                <div class="premium-card-v2">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3 style="color:white; font-size:18px;">KahveLab <span style="color:var(--gold)">Premium</span></h3>
+                        <i class="fa-solid fa-crown" style="color:var(--gold); font-size:22px;"></i>
+                    </div>
+                    <ul class="premium-feature-list" style="margin-top:15px; list-style:none;">
+                        <li><i class="fa-solid fa-check" style="color:var(--gold)"></i> Falcıya 1 Soru Hakkı</li>
+                        <li><i class="fa-solid fa-check" style="color:var(--gold)"></i> Detaylı İlişki Analizi</li>
+                    </ul>
+                    <button class="premium-btn">Premium'a Geç ₺99/ay</button>
                 </div>
-                <div class="nav-item" onclick="navTo('fortunes-screen', this)"> 
-                    <i class="fa-solid fa-scroll"></i><span>Fallarım</span>
+
+                <div class="menu-list">
+                    <div class="menu-item" onclick="openModal('settings-modal')">
+                        <span><i class="fa-solid fa-gear" style="margin-right:10px; color:rgba(255,255,255,0.5);"></i> Ayarlar</span>
+                        <i class="fa-solid fa-chevron-right" style="font-size:12px; opacity:0.5;"></i>
+                    </div>
+                    <div class="menu-item">
+                        <span><i class="fa-solid fa-bell" style="margin-right:10px; color:rgba(255,255,255,0.5);"></i> Bildirimler</span>
+                        <i class="fa-solid fa-chevron-right" style="font-size:12px; opacity:0.5;"></i>
+                    </div>
+                    <div class="menu-item" style="color:#FF3B30; border-color:rgba(255,59,48,0.2);" onclick="window.logoutUser()">
+                        <span><i class="fa-solid fa-right-from-bracket" style="margin-right:10px;"></i> Çıkış Yap</span>
+                    </div>
                 </div>
-                <div class="nav-item active" onclick="navTo('profile-screen', this)">
-                    <i class="fa-solid fa-user"></i><span>Hesabım</span>
+            </div>
+        </div>
+
+        <div id="photo-options-sheet" class="action-sheet">
+            <h3 style="text-align:center; margin-bottom:20px; font-size:16px;">Fal Gönder</h3>
+            <button class="action-btn" onclick="alert('Kamera')"><i class="fa-solid fa-camera"></i> Fotoğraf Çek</button>
+            <button class="action-btn" onclick="alert('Galeri')"><i class="fa-solid fa-image"></i> Galeriden Seç</button>
+            <button class="action-btn" style="color:#FF3B30; background:rgba(255,59,48,0.1);" onclick="closeAllSheets()">Vazgeç</button>
+        </div>
+
+        <div id="settings-modal" class="modal-sheet">
+             <div class="header" style="padding:0; margin-bottom:20px; border:none; justify-content:space-between;">
+                <div style="font-weight:700;">Ayarlar</div>
+                <div style="color:var(--gold); cursor:pointer;" onclick="closeAllSheets()">Bitti</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                    <span>Karanlık Mod</span> <i class="fa-solid fa-toggle-on" style="color:var(--gold); font-size:24px;"></i>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                    <span>Ses Efektleri</span> <i class="fa-solid fa-toggle-off" style="color:grey; font-size:24px;"></i>
                 </div>
             </div>
         </div>
@@ -323,6 +369,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
+        // LOGIN
         window.handleLogin = async function() {
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-pass').value;
@@ -330,12 +377,38 @@
             catch (error) { alert("Hata: " + error.message); }
         }
 
+        // LOGOUT
+        window.logoutUser = async function() {
+            try { await signOut(auth); } catch(e) { console.log(e); }
+        }
+
+        // STATE LISTENER
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                // Giriş Yapıldı
                 document.getElementById('profile-name').innerText = user.email.split('@')[0];
                 document.getElementById('summary-content').style.filter = 'none';
                 document.getElementById('lock-overlay').style.display = 'none';
+                
+                // Profil Ekranını Düzenle
+                document.getElementById('guest-actions').classList.add('hidden');
+                document.getElementById('premium-area').classList.remove('hidden');
+
+                if(user.email === 'volkan@litre.com') {
+                    document.querySelector('.premium-btn').innerText = "Premium Üye Aktif";
+                    document.querySelector('.premium-btn').style.background = "#4cd964";
+                    document.querySelector('.premium-btn').style.color = "white";
+                }
+                
                 window.navTo('home-screen'); 
+            } else {
+                // Çıkış Yapıldı
+                document.getElementById('profile-name').innerText = "Misafir Kullanıcı";
+                document.getElementById('guest-actions').classList.remove('hidden');
+                document.getElementById('premium-area').classList.add('hidden');
+                
+                document.getElementById('summary-content').style.filter = 'blur(6px)';
+                document.getElementById('lock-overlay').style.display = 'flex';
             }
         });
 
@@ -343,16 +416,9 @@
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
             
-            // Eğer alt menüden tıklandıysa aktif yap
             if(navEl) {
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 navEl.classList.add('active');
-            }
-            
-            // Eğer Home dışındaki sayfalara geçilirse arka planı normale çevir
-            const app = document.getElementById('app');
-            if(screenId !== 'home-screen') {
-                // Burada body arka planını değiştirebiliriz ama .screen zaten kendi bg'sine sahip.
             }
         }
         
@@ -360,19 +426,14 @@
             document.getElementById('overlay').classList.add('open');
             document.getElementById('photo-options-sheet').classList.add('open');
         }
+        window.openModal = function(id) {
+            document.getElementById('overlay').classList.add('open');
+            document.getElementById(id).classList.add('open');
+        }
         window.closeAllSheets = function() {
             document.getElementById('overlay').classList.remove('open');
-            document.querySelectorAll('.action-sheet').forEach(s => s.classList.remove('open'));
+            document.querySelectorAll('.action-sheet, .modal-sheet').forEach(s => s.classList.remove('open'));
         }
-
-        // Splash screen animasyonu
-        setTimeout(() => { 
-            document.getElementById('splash-screen').style.opacity='0'; 
-            setTimeout(()=>{ 
-                document.getElementById('splash-screen').style.display='none'; 
-                document.getElementById('home-screen').classList.add('active');
-            },800); 
-        }, 2000);
 
     </script>
 </body>
